@@ -40,20 +40,7 @@ export class CdkCodebuildStack extends Stack {
         computeType: ComputeType.SMALL,
         privileged: true,
       },
-      buildSpec: BuildSpec.fromObject({
-        version: '0.2',
-        env: {
-          shell: 'bash',
-        },
-        phases: {
-          build: {
-            commands: [
-              'echo "Hello, CodeBuild!"',
-              'codebuild-breakpoint',
-            ],
-          },
-        },
-      }),
+      buildSpec: BuildSpec.fromSourceFilename('buildspec.yml'),
     });
     project.role?.addToPrincipalPolicy(new PolicyStatement(sessionManagerPolicy));
   }
