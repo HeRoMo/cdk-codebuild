@@ -6,6 +6,18 @@ import {
   LinuxBuildImage,
   ComputeType,
 } from '@aws-cdk/aws-codebuild';
+import { Effect, PolicyStatement, PolicyStatementProps } from '@aws-cdk/aws-iam';
+
+const sessionManagerPolicy: PolicyStatementProps = {
+  effect: Effect.ALLOW,
+  actions: [
+    'ssmmessages:CreateControlChannel',
+    'ssmmessages:CreateDataChannel',
+    'ssmmessages:OpenControlChannel',
+    'ssmmessages:OpenDataChannel',
+  ],
+  resources: ['*'],
+};
 
 export class CdkCodebuildStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
@@ -43,5 +55,6 @@ export class CdkCodebuildStack extends Stack {
         },
       }),
     });
+    project.role?.addToPrincipalPolicy(new PolicyStatement(sessionManagerPolicy));
   }
 }
